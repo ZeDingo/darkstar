@@ -36,9 +36,13 @@
     <ClInclude Include="..\..\src\common\zlib.h" />
     <ClInclude Include="..\..\src\login\account.h" />
     <ClInclude Include="..\..\src\login\lobby.h" />
+    <ClInclude Include="..\..\src\login\lobby_packets.h" />
     <ClInclude Include="..\..\src\login\login.h" />
     <ClInclude Include="..\..\src\login\login_auth.h" />
     <ClInclude Include="..\..\src\login\login_session.h" />
+    <ClInclude Include="..\..\src\login\packets\lobby_a1_reserve.h" />
+    <ClInclude Include="..\..\src\login\packets\lobby_a2_reserve.h" />
+    <ClInclude Include="..\..\src\login\packets\lobby_basic.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +63,9 @@
     <ClCompile Include="..\..\src\login\login.cpp" />
     <ClCompile Include="..\..\src\login\login_auth.cpp" />
     <ClCompile Include="..\..\src\login\login_session.cpp" />
+    <ClCompile Include="..\..\src\login\packets\lobby_a1_reserve.cpp" />
+    <ClCompile Include="..\..\src\login\packets\lobby_a2_reserve.cpp" />
+    <ClCompile Include="..\..\src\login\packets\lobby_basic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

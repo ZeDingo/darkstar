@@ -37,20 +37,20 @@
 
 extern lan_config_t lan_config;
 
-struct login_config_t
+struct login_config_t               // configuration structure for lobby server
 {
-	uint16 usLoginAuthPort;			// authentification port of login server      ->  54231
-	uint32 uiLoginAuthIp;			// authentification ip of login server	      -> INADDR_ANY
+	uint16 LoginAuthPort;           // authentification port of login server      ->  54231
+	uint32 LoginAuthIp;             // authentification ip of login server	      -> INADDR_ANY
 	
-	uint16 usLobbyDataPort;
-	uint32 uiLobbyDataIp;
+	uint16 LobbyDataPort;           // data port of login server    -> 54230
+	uint32 LobbyDataIp;             // data ip of login server      -> INADDR_ANY
 	
-	uint16 usLobbyViewPort;
-	uint32 uiLobbyViewIp;
+	uint16 LobbyViewPort;           // view port of login server    -> 54001
+	uint32 LobbyViewIp;             // view ip of login server      -> INADDR_ANY
 
-    uint16 expansions;
+    uint16 expansions;              // server's supported game expansions
 
-    const char* servername;
+    const char* servername;         // server's name
 	
 	const char* mysql_host;			// mysql addr     -> localhost:3306
 	uint16      mysql_port;			// mysql port     -> 3306
@@ -64,19 +64,10 @@ extern login_config_t login_config;
 extern Sql_t *SqlHandle;
 //////////////////////////////////////////////////////////
 
-/*======================================================
- * Login-Server Version Screen [venom]
- *------------------------------------------------------*/
-void login_helpscreen(int32 flag);
-/*======================================================
- * Login-Server Version Screen [venom]
- *------------------------------------------------------*/
-void login_versionscreen(int32 flag);
-/*==========================================
- * Login-Server Config [venom]
- *------------------------------------------*/
-int32 login_config_read(const char *cfgName);
+void login_helpscreen(int32 flag);              // print commandline usage help to screen [venom]
+void login_versionscreen(int32 flag);           // print login server's version to screen [venom]
 
-int32 login_config_default();
+int32 login_config_read(const char *cfgName);   // load configuration file cfgName into login_config [venom]
+int32 login_config_default();                   // load a default configuration into login_config
 
 #endif

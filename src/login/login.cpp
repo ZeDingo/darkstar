@@ -48,7 +48,8 @@ login_config_t login_config;	//main settings
 Sql_t *SqlHandle = NULL;
 
 
-
+// Set up the server for work
+// Called from kernel.cpp main entrypoint
 int32 do_init(int32 argc,char** argv)
 {
 	int32 i;
@@ -66,7 +67,7 @@ int32 do_init(int32 argc,char** argv)
 			LOGIN_CONF_FILENAME=argv[i+1];
 		else if (strcmp(argv[i], "--lan_config") == 0 || strcmp(argv[i], "--lan-config") == 0 )
 			lan_cfgName = argv[i+1];
-		else if (strcmp(argv[i],"--run_once") == 0)	// close the map-server as soon as its done.. for testing [Celest]
+		else if (strcmp(argv[i], "--run_once") == 0)	// close the map-server as soon as its done.. for testing [Celest]
 			runflag = 0;
 	}
 
@@ -78,14 +79,14 @@ int32 do_init(int32 argc,char** argv)
 	login_config_read(LOGIN_CONF_FILENAME);
 
 
-	login_fd		   = makeListenBind_tcp(login_config.uiLoginAuthIp,login_config.usLoginAuthPort,connect_client_login);
-	ShowStatus("The login-server-auth is " CL_GREEN"ready" CL_RESET" (Server is listening on the port %u).\n\n", login_config.usLoginAuthPort);
+	login_fd		   = makeListenBind_tcp(login_config.LoginAuthIp,login_config.LoginAuthPort,connect_client_login);
+	ShowStatus("The login-server-auth is " CL_GREEN"ready" CL_RESET" (Server is listening on the port %u).\n\n", login_config.LoginAuthPort);
 
-	login_lobbydata_fd = makeListenBind_tcp(login_config.uiLobbyDataIp,login_config.usLobbyDataPort,connect_client_lobbydata);
-	ShowStatus("The login-server-lobbydata is " CL_GREEN"ready" CL_RESET" (Server is listening on the port %u).\n\n", login_config.usLobbyDataPort);
+	login_lobbydata_fd = makeListenBind_tcp(login_config.LobbyDataIp,login_config.LobbyDataPort,connect_client_lobbydata);
+	ShowStatus("The login-server-lobbydata is " CL_GREEN"ready" CL_RESET" (Server is listening on the port %u).\n\n", login_config.LobbyDataPort);
 
-	login_lobbyview_fd = makeListenBind_tcp(login_config.uiLobbyViewIp,login_config.usLobbyViewPort,connect_client_lobbyview);
-	ShowStatus("The login-server-lobbyview is " CL_GREEN"ready" CL_RESET" (Server is listening on the port %u).\n\n", login_config.usLobbyViewPort);
+	login_lobbyview_fd = makeListenBind_tcp(login_config.LobbyViewIp,login_config.LobbyViewPort,connect_client_lobbyview);
+	ShowStatus("The login-server-lobbyview is " CL_GREEN"ready" CL_RESET" (Server is listening on the port %u).\n\n", login_config.LobbyViewPort);
 
 	SqlHandle = Sql_Malloc();
 	if( Sql_Connect(SqlHandle,login_config.mysql_login,
@@ -111,6 +112,7 @@ int32 do_init(int32 argc,char** argv)
 	return 0;
 }
 
+// Server terminating, handle cleanup
 void do_final(void)
 {
 	aFree((void*)login_config.mysql_host);
@@ -122,6 +124,8 @@ void do_final(void)
 	Sql_Free(SqlHandle);
 }
 
+// Server terminating due to thrown SIGFPE (floating point exception)
+// or SIGSEGV (segmentation fault)
 void do_abort(void)
 {
 	do_final();
@@ -250,6 +254,7 @@ int parse_console(char *buf)
 	return 0;
 }
 
+// Load configuration file cfgName into login_config
 int32 login_config_read(const char *cfgName)
 {
 	char line[1024], w1[1024], w2[1024];
@@ -331,14 +336,16 @@ int32 login_config_read(const char *cfgName)
 	fclose(fp);
 	return 0;
 }
+
+// Load a default configuration into login_config
 int32 login_config_default()
 {
-	login_config.uiLobbyDataIp   = INADDR_ANY;
-	login_config.usLobbyDataPort = 54230;
-	login_config.uiLobbyViewIp   = INADDR_ANY;
-	login_config.usLobbyViewPort = 54001;
-	login_config.uiLoginAuthIp   = INADDR_ANY;
-	login_config.usLoginAuthPort = 54231;
+	login_config.LobbyDataIp   = INADDR_ANY;
+	login_config.LobbyDataPort = 54230;
+	login_config.LobbyViewIp   = INADDR_ANY;
+	login_config.LobbyViewPort = 54001;
+	login_config.LoginAuthIp   = INADDR_ANY;
+	login_config.LoginAuthPort = 54231;
 
     login_config.expansions = 0xFFFF;
     login_config.servername = "DarkStar";
@@ -351,15 +358,17 @@ int32 login_config_default()
 	return 0;
 }
 
+// Print login server's version to screen
 void login_versionscreen(int32 flag)
 {
 	ShowInfo(CL_WHITE "Darkstar version %d.%02d.%02d" CL_RESET"\n",
 		DARKSTAR_MAJOR_VERSION, DARKSTAR_MINOR_VERSION, DARKSTAR_REVISION);
-	ShowInfo(CL_GREEN "Website/Forum:" CL_RESET "\thttp://darkstarproject.ru/\n");
+	ShowInfo(CL_GREEN "Website/Forum:" CL_RESET "\thttp://dspt.info/\n");
 	ShowInfo("\nOpen " CL_WHITE "readme.html" CL_RESET " for more information.");
 	if (flag) exit(EXIT_FAILURE);
 }
 
+// Print commandline usage help to screen
 void login_helpscreen(int32 flag)
 {
 	ShowMessage("Usage: login-server [options]\n");

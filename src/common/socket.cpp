@@ -62,7 +62,7 @@ int sock_arr_len = 0;
 ///
 /// @param s Socket
 /// @return Fd or -1
-int sock2fd(SOCKET s)
+int sock2fd(SOCKET s)   // Returns the first fd (file descriptor) associated with the socket
 {
 	int fd;
 
@@ -76,11 +76,11 @@ int sock2fd(SOCKET s)
 }
 
 
-/// Inserts the socket into the global array of sockets.
-/// Returns a new fd associated with the socket.
-/// If there are too many sockets it closes the socket, sets an error and 
-//  returns -1 instead.
-/// Since fd 0 is reserved, it returns values in the range [1,FD_SETSIZE[.
+/// <summary><para>Inserts the socket into the global array of sockets.
+/// Returns a new fd associated with the socket.</para>
+/// <para>If there are too many sockets it closes the socket, sets an error and 
+//  returns -1 instead.</para>
+/// <para>Since fd 0 is reserved, it returns values in the range [1,FD_SETSIZE].</para></summary>
 ///
 /// @param s Socket
 /// @return New fd or -1
@@ -104,6 +104,7 @@ int sock2newfd(SOCKET s)
 	return fd;
 }
 
+///<summary>Accept an incoming connection and return its file descriptor</summary>
 int sAccept(int fd, struct sockaddr* addr, int* addrlen)
 {
 	SOCKET s;
@@ -115,6 +116,7 @@ int sAccept(int fd, struct sockaddr* addr, int* addrlen)
 	return sock2newfd(s);
 }
 
+///<summary>Close the connection defined by the file descriptor <paramref name="fd" /></summary>
 int sClose(int fd)
 {
 	int ret = closesocket(fd2sock(fd));
@@ -122,6 +124,7 @@ int sClose(int fd)
 	return ret;
 }
 
+// Creates a new socket and returns it's file descriptor
 int sSocket(int af, int type, int protocol)
 {
 	SOCKET s;

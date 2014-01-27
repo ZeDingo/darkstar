@@ -271,6 +271,7 @@ public:
 
 	uint8	m_mjob;
 	uint16	m_zone;
+    uint16  m_prevzone;
 	uint8	m_nation;
 
 	look_t	m_look;	

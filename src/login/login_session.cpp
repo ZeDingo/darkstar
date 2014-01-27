@@ -25,8 +25,10 @@
 #include "../common/socket.h"
 #include "login_session.h"
 
+// Global std::list of login_session_data_t
 login_sd_list_t login_sd_list;
 
+// Returns the session data associated with accid
 login_session_data_t *find_loginsd_byaccid(int32 accid)
 {
 	for(login_sd_list_t::iterator i = login_sd_list.begin(); 
@@ -39,6 +41,14 @@ login_session_data_t *find_loginsd_byaccid(int32 accid)
 	return NULL;
 }
 
+login_sd_list_t *find_all_loginsd_byip(uint32 ip)
+{
+    //TODO: do this 
+
+}
+
+// Returns the first session data associated with ip
+// IMO should return a list
 login_session_data_t *find_loginsd_byip(uint32 ip)
 {
 	//////// 19/03/2012 Fix for 1 IP -> Many Accounts

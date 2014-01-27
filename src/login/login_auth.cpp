@@ -35,11 +35,6 @@
 #include <ctype.h>
 int32 login_fd;					//main fd(socket) of server
 
-/*
-*	
-*		LOGIN SECTION
-*
-*/
 int32 connect_client_login(int32 listenfd)
 {
 	int32 fd = 0;
@@ -53,11 +48,14 @@ int32 connect_client_login(int32 listenfd)
 	return -1;
 }
 
+/*
+
+*/
 int32 login_parse(int32 fd)
 {
 	login_session_data_t* sd = (login_session_data_t*)session[fd]->session_data;
 
-	//check if sd will not defined
+	//check if sd is not defined
 	if( sd == NULL )
 	{
 		CREATE(session[fd]->session_data,login_session_data_t,1);
@@ -96,7 +94,7 @@ int32 login_parse(int32 fd)
 		if( login_datacheck(login,3,sizeof(login)) == -1 ||
 			login_datacheck(password,6,sizeof(password)) == -1 )
 		{
-			ShowWarning(CL_WHITE"login_parse" CL_RESET":" CL_WHITE"%s" CL_RESET" send unreadable data\n",ip2str(sd->client_addr,NULL));
+			ShowWarning(CL_WHITE"login_parse" CL_RESET":" CL_WHITE"%s" CL_RESET" sent unreadable data\n",ip2str(sd->client_addr,NULL));
 			WBUFB(session[fd]->wdata,0) = LOGIN_ERROR;
 			WFIFOSET(fd,1);
 			do_close_login(sd,fd);

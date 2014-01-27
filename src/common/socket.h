@@ -127,22 +127,22 @@ int sSocket(int af, int type, int protocol);
 
 #endif
 // buffer I/O macros
-#define RBUFP(p,pos) (((uint8*)(p)) + (pos))
-#define RBUFB(p,pos) (*(uint8*)RBUFP((p),(pos)))
-#define RBUFW(p,pos) (*(uint16*)RBUFP((p),(pos)))
-#define RBUFL(p,pos) (*(uint32*)RBUFP((p),(pos)))
-#define RBUFF(p,pos) (*(float*)RBUFP((p),(pos)))
+#define RBUFP(p,pos) (((uint8*)(p)) + (pos))        // Read from buffer (pointer)
+#define RBUFB(p,pos) (*(uint8*)RBUFP((p),(pos)))    // Read from buffer (byte/uint8)
+#define RBUFW(p,pos) (*(uint16*)RBUFP((p),(pos)))   // Read from buffer (word/uint16)
+#define RBUFL(p,pos) (*(uint32*)RBUFP((p),(pos)))   // Read from buffer (long/uint32)
+#define RBUFF(p,pos) (*(float*)RBUFP((p),(pos)))    // Read from buffer (float)
 
-#define WBUFP(p,pos) (((uint8*)(p)) + (pos))
-#define WBUFB(p,pos) (*(uint8*)WBUFP((p),(pos)))
-#define WBUFW(p,pos) (*(uint16*)WBUFP((p),(pos)))
-#define WBUFL(p,pos) (*(uint32*)WBUFP((p),(pos)))
-#define WBUFU(p,pos) (*(uint64*)WBUFP((p),(pos)))
-#define WBUFF(p,pos) (*(float*)WBUFP((p),(pos)))
+#define WBUFP(p,pos) (((uint8*)(p)) + (pos))        // Write to buffer (pointer)
+#define WBUFB(p,pos) (*(uint8*)WBUFP((p),(pos)))    // Write to buffer (byte/uint8)
+#define WBUFW(p,pos) (*(uint16*)WBUFP((p),(pos)))   // Write to buffer (word/uint16)
+#define WBUFL(p,pos) (*(uint32*)WBUFP((p),(pos)))   // Write to buffer (long/uint32)
+#define WBUFU(p,pos) (*(uint64*)WBUFP((p),(pos)))   // Write to buffer (uint64)
+#define WBUFF(p,pos) (*(float*)WBUFP((p),(pos)))    // Write to buffer (float)
 
-#define TOB(n) ((uint8)((n)&UINT8_MAX))
-#define TOW(n) ((uint16)((n)&UINT16_MAX))
-#define TOL(n) ((uint32)((n)&UINT32_MAX))
+#define TOB(n) ((uint8)((n)&UINT8_MAX))             // Cast to byte/uint8, dropping all more significant bits
+#define TOW(n) ((uint16)((n)&UINT16_MAX))           // Cast to word/uint16, dropping all more significant bits
+#define TOL(n) ((uint32)((n)&UINT32_MAX))           // Cast to long/uint32, dropping all more significant bits
 
 extern fd_set readfds;
 extern int fd_max;
@@ -171,7 +171,8 @@ const char* ip2str(uint32 ip, char ip_str[16]);
 
 uint32 str2ip(const char* ip_str);
 
-#define CONVIP(ip) ((ip)>>24)&0xFF,((ip)>>16)&0xFF,((ip)>>8)&0xFF,((ip)>>0)&0xFF
+// Convert an IP address stored as int back to IPv4 (x.x.x.x) specification
+#define CONVIP(ip) ((ip)>>24)&0xFF,((ip)>>16)&0xFF,((ip)>>8)&0xFF,((ip)>>0)&0xFF 
 
 uint16 ntows(uint16 netshort);
 
@@ -221,8 +222,9 @@ extern int32 naddr_;   // # of ip addresses
 	#define RFIFOSPACE(fd) (session[fd]->max_rdata - session[fd]->rdata_size)
 	#define WFIFOSPACE(fd) (session[fd]->max_wdata - session[fd]->wdata_size)
 
-
+    // Returns length of waiting data
 	#define RFIFOREST(fd)  (session[fd]->flag.eof ? 0 : session[fd]->rdata_size - session[fd]->rdata_pos)
+
 	#define RFIFOFLUSH(fd) \
 		do { \
 			if(session[fd]->rdata_size == session[fd]->rdata_pos){ \

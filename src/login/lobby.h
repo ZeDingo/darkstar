@@ -32,36 +32,16 @@
 extern int32 login_lobbydata_fd;
 extern int32 login_lobbyview_fd;
 
-/*
-*
-*	Parse connections for lobby data
-*/
-int32 connect_client_lobbydata(int32 listenfd);
+int32 connect_client_lobbydata(int32 listenfd);    //Parse connections for lobby data
+int32 connect_client_lobbyview(int32 listenfd);    //Parse connections for lobby view
 
-/*
-*
-*	Parse connections for lobby view
-*
-*/
-int32 connect_client_lobbyview(int32 listenfd);
-/*==========================================
-* Login Lobby Data parse
-*-------------------------------------------*/
 int32 lobbydata_parse(int32 fd);
+int32 lobbyview_parse(int32 fd);    /*Login Lobby View parse*/
 
-/*==========================================
-* Login Lobby View parse
-*-------------------------------------------*/
-int32 lobbyview_parse(int32 fd);
-
-/*=============================================
-* lobby data close socket
-*-------------------------------------------*/
-int32 do_close_lobbydata(login_session_data_t* loginsd, int32 fd);
-
-int32 do_close_lobbyview(login_session_data_t*, int32 fd);
+int32 do_close_lobbydata(login_session_data_t* loginsd, int32 fd);    //Close lobby data socket
+int32 do_close_lobbyview(login_session_data_t*, int32 fd);    //Close lobby view socket
 
 
-int32 lobby_createchar(login_session_data_t* loginsd, int8* buf);
-int32 lobby_createchar_save(uint32 accid, uint32 charid, char_mini* createchar);
+int32 lobby_createchar(login_session_data_t* loginsd, int8* buf);       //Process char creation info from client
+int32 lobby_createchar_save(uint32 accid, uint32 charid, char_mini* createchar);    //Save new character to database
 #endif

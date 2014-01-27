@@ -29,21 +29,41 @@
 #include <list>
 
 struct login_session_data_t{
-	char login[17];
+    // User's account name
+    char login[17];
+
+    // User's account id
 	uint32 accid;
+
+    // Something to do with multi-boxing
 	uint32 serviced;
+
+    // User's IP address
 	uint32 client_addr;
+
+    // User's port? Is this local or remote?
 	uint16 client_port;
+
+    // Zone server's IP
 	uint32 servip;
 
+    // User's logged in character's name
 	char charname[17];
+
+    // Associated file descriptor for authentication socket
 	int32 login_fd;
+
+    // Associated file descriptor for data socket
 	int32 login_lobbydata_fd;
+
+    // Associated file descriptor for view socket
 	int32 login_lobbyview_fd;
 };
 
 
 typedef std::list<login_session_data_t*> login_sd_list_t;
+
+// std::list of login_session_data_t
 extern login_sd_list_t login_sd_list;
 
 login_session_data_t* find_loginsd_byaccid(int32 accid);

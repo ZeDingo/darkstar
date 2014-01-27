@@ -42,11 +42,9 @@
 #define LOGIN_ERROR_CREATE     0x04
 
 extern int32 login_fd;
-/*
-*
-*	Parse connections for authentification
-*/
-int32 connect_client_login(int32 listenfd);
+
+///<summary>Parse connections for authentification</summary>
+int32 connect_client_login(int32 listenfd); 
 
 
 int32 login_parse(int32 fd);
